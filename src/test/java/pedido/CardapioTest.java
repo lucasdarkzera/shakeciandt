@@ -2,6 +2,7 @@ package pedido;
 
 import ingredientes.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -16,6 +17,11 @@ public class CardapioTest {
 
     @BeforeAll
     void setup(){
+        cardapio = new Cardapio();
+    }
+
+    @BeforeEach
+        void reset(){
         cardapio = new Cardapio();
     }
 
