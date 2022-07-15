@@ -5,25 +5,25 @@ import ingredientes.Base;
 import ingredientes.Fruta;
 import ingredientes.Topping;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.TreeSet;
+import java.util.Collection;
 
 public class Shake {
     private Base base;
     private Fruta fruta;
     private Topping topping;
-    private List<Adicional> adicionais;
+    private TreeSet<Adicional> adicionais;
     private TipoTamanho  tipoTamanho;
 
     public Shake(Base base,
                  Fruta fruta,
                  Topping topping,
-                 ArrayList<Adicional> adicionais,
+                 Collection<Adicional> adicionais,
                  TipoTamanho tipoTamanho) {
         this.base = base;
         this.fruta = fruta;
         this.topping = topping;
-        this.adicionais = adicionais;
+        this.adicionais = new TreeSet<>(adicionais);
         this.tipoTamanho = tipoTamanho;
     }
 
@@ -31,6 +31,7 @@ public class Shake {
         this.base = base;
         this.fruta = fruta;
         this.topping = topping;
+        this.adicionais = new TreeSet<>();
         this.tipoTamanho = tipoTamanho;
     }
 
@@ -46,7 +47,7 @@ public class Shake {
         return topping;
     }
 
-    public List<Adicional> getAdicionais() {
+    public TreeSet<Adicional> getAdicionais() {
         return adicionais;
     }
 

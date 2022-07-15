@@ -9,10 +9,10 @@ import produto.Shake;
 import produto.TipoTamanho;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.fail;
+import static org.junit.jupiter.api.Assertions.*;
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 public class PedidoTest{
@@ -60,8 +60,9 @@ public class PedidoTest{
             assertEquals(new Fruta(TipoFruta.Morango), item.getShake().getFruta());
             assertEquals(new Topping(TipoTopping.Mel), item.getShake().getTopping());
             assertEquals(2, item.getShake().getAdicionais().size());
-            assertEquals(new Topping(TipoTopping.Aveia), item.getShake().getAdicionais().get(0));
-            assertEquals(new Fruta(TipoFruta.Banana), item.getShake().getAdicionais().get(1));
+            assertTrue(item.getShake().getAdicionais().contains(new Topping(TipoTopping.Aveia)));
+            assertTrue(item.getShake().getAdicionais().contains(new Fruta(TipoFruta.Banana)));
+
             assertEquals(TipoTamanho.P, item.getShake().getTipoTamanho());
             assertEquals(1, item.getQuantidade());
         });
@@ -86,7 +87,7 @@ public class PedidoTest{
             assertEquals(new Base(TipoBase.Sorvete), item.getShake().getBase());
             assertEquals(new Fruta(TipoFruta.Morango), item.getShake().getFruta());
             assertEquals(new Topping(TipoTopping.Mel), item.getShake().getTopping());
-            assertEquals(new ArrayList<>(), item.getShake().getAdicionais());
+            assertEquals(new HashSet<>(), item.getShake().getAdicionais());
             assertEquals(TipoTamanho.P, item.getShake().getTipoTamanho());
             assertEquals(3, item.getQuantidade());
         });
@@ -138,6 +139,9 @@ public class PedidoTest{
 
     @Test
     void test_removerItemPedido_quantidadeMaiorQue1(){
+        /*
+            A collection de Adicionais fica ordenada - Alterei de lista pra um TreeSet p imprimir este msm comportamento
+         */
         Shake shake = new Shake(new Base(TipoBase.Sorvete),
                 new Fruta(TipoFruta.Morango),
                 new Topping(TipoTopping.Mel),
