@@ -2,6 +2,7 @@ package pedido;
 
 import ingredientes.*;
 import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
 
@@ -16,6 +17,11 @@ public class CardapioTest {
 
     @BeforeAll
     void setup(){
+        cardapio = new Cardapio();
+    }
+
+    @BeforeEach
+        void reset(){
         cardapio = new Cardapio();
     }
 
@@ -104,13 +110,15 @@ public class CardapioTest {
             assertEquals("Preco invalido.", e.getMessage());
             assertEquals(IllegalArgumentException.class, e.getClass());
         }
-
+        boolean n = false;
         try {
-            cardapio.atualizarIngrediente(new Fruta(TipoFruta.Morango), 0.0);
+            n = cardapio.atualizarIngrediente(new Fruta(TipoFruta.Morango), 0.0);
             fail("Excecao nao encontrada");
         } catch (Throwable e) {
             assertEquals("Preco invalido.", e.getMessage());
             assertEquals(IllegalArgumentException.class, e.getClass());
+            assertEquals(n, false);
+
         }
     }
 
