@@ -110,13 +110,15 @@ public class CardapioTest {
             assertEquals("Preco invalido.", e.getMessage());
             assertEquals(IllegalArgumentException.class, e.getClass());
         }
-
+        boolean n = false;
         try {
-            cardapio.atualizarIngrediente(new Fruta(TipoFruta.Morango), 0.0);
+            n = cardapio.atualizarIngrediente(new Fruta(TipoFruta.Morango), 0.0);
             fail("Excecao nao encontrada");
         } catch (Throwable e) {
             assertEquals("Preco invalido.", e.getMessage());
             assertEquals(IllegalArgumentException.class, e.getClass());
+            assertEquals(n, false);
+
         }
     }
 

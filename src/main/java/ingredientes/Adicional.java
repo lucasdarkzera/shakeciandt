@@ -1,3 +1,4 @@
 package ingredientes;
-public interface Adicional extends Ingrediente{
+public interface Adicional<T> extends Ingrediente{
+
 }

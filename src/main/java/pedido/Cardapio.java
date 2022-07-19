@@ -2,6 +2,7 @@ package pedido;
 
 import ingredientes.Ingrediente;
 
+import java.util.Objects;
 import java.util.TreeMap;
 
 public class Cardapio {
@@ -15,24 +16,33 @@ public class Cardapio {
         return this.precos;
     }
 
-    public void adicionarIngrediente(Ingrediente ingrediente,Double preco){
+    public void adicionarIngrediente(Ingrediente ingrediente, Double preco){
+
+        if (Objects.isNull(ingrediente)){
+            throw new IllegalArgumentException("Ingrediente inválido");
+        }
 
         if (!this.isPriceValid(preco)){
             throw new IllegalArgumentException("Preco invalido.");
         }
+
         if (!this.getPrecos().containsKey(ingrediente)) // necessario?
             this.getPrecos().put(ingrediente, preco);
     }
 
-    public boolean atualizarIngrediente(Ingrediente ingrediente,Double preco){
-        if (!isPriceValid(preco)){
-           throw new IllegalArgumentException("Preco invalido.");
+    public boolean atualizarIngrediente(Ingrediente ingrediente, Double preco){
+        if (Objects.isNull(ingrediente)){
+            throw new IllegalArgumentException("Ingrediente inválido");
         }
+
         if (!this.getPrecos().containsKey(ingrediente)){
             throw new IllegalArgumentException("Ingrediente nao existe no cardapio.");
         }
 
-        // TODO melhorar
+        if (!isPriceValid(preco)){
+           throw new IllegalArgumentException("Preco invalido.");
+        }
+
         this.precos.replace(ingrediente, preco);
         return true;
     }
@@ -51,6 +61,7 @@ public class Cardapio {
         }
         throw new IllegalArgumentException("Ingrediente nao existe no cardapio.");
     }
+
 
     @Override
     public String toString() {

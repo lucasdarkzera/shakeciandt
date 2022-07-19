@@ -140,7 +140,7 @@ public class PedidoTest{
     @Test
     void test_removerItemPedido_quantidadeMaiorQue1(){
         /*
-            A collection de Adicionais fica ordenada - Alterei de lista pra um TreeSet p imprimir este msm comportamento
+            TODO A collection de Adicionais fica ordenada - Alterei de lista pra um TreeSet p imprimir este msm comportamento
          */
         Shake shake = new Shake(new Base(TipoBase.Sorvete),
                 new Fruta(TipoFruta.Morango),
@@ -227,7 +227,7 @@ public class PedidoTest{
                 new Fruta(TipoFruta.Banana),
                 new Topping(TipoTopping.Aveia),
                 new ArrayList<>(List.of(new Topping(TipoTopping.Mel))),
-                TipoTamanho.G); //16
+                TipoTamanho.G); // 16
 
         Shake shake2 = new Shake(new Base(TipoBase.Sorvete),
                 new Fruta(TipoFruta.Morango),
@@ -250,7 +250,7 @@ public class PedidoTest{
                 new Fruta(TipoFruta.Banana),
                 new Topping(TipoTopping.Aveia),
                 new ArrayList<>(),
-                TipoTamanho.G); //15
+                TipoTamanho.G); // 15
 
         Shake shake2 = new Shake(new Base(TipoBase.Sorvete),
                 new Fruta(TipoFruta.Morango),
@@ -265,6 +265,24 @@ public class PedidoTest{
         pedido.adicionarItemPedido(itemPedido2);
 
         assertEquals(25, pedido.calcularTotal(cardapio));
+    }
+
+
+    @Test
+    void test_remover_item_unico(){
+
+        Shake shake1 = new Shake(new Base(TipoBase.Iorgute),
+                new Fruta(TipoFruta.Banana),
+                new Topping(TipoTopping.Aveia),
+                new ArrayList<>(List.of(new Fruta(TipoFruta.Banana), new Topping(TipoTopping.Aveia))),
+                TipoTamanho.G); // 15
+        ItemPedido itemPedido = new ItemPedido(shake1, 1);
+
+        pedido.adicionarItemPedido(itemPedido);
+
+        assertEquals(pedido.removeItemPedido(itemPedido).getItens().size(), 0);
+
+
     }
 
 }

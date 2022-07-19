@@ -1,5 +1,5 @@
 package ingredientes;
 
-public interface Ingrediente{
+public interface Ingrediente<T>{
     Enum obterTipo();
 }

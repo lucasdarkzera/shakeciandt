@@ -1,7 +1,10 @@
 package pedido;
 
-import ingredientes.Ingrediente;
+import ingredientes.Adicional;
+import produto.TipoTamanho;
+
 import java.util.ArrayList;
+import java.util.Objects;
 
 public class Pedido{
 
@@ -9,10 +12,10 @@ public class Pedido{
     private  ArrayList<ItemPedido> itens;
     private Cliente cliente;
 
-    public Pedido(int id, ArrayList<ItemPedido> itens,Cliente cliente){
+    public Pedido(int id, ArrayList<ItemPedido> itens, Cliente cliente){
         this.id = id;
-        this.itens=itens;
-        this.cliente=cliente;
+        this.itens = itens;
+        this.cliente = cliente;
     }
 
     public ArrayList<ItemPedido> getItens() {
@@ -29,14 +32,20 @@ public class Pedido{
 
     public double calcularTotal(Cardapio cardapio){
         double total = 0;
-/*
-        O preço de um Shake é calculado com o valor da Base de acordo com o TipoTamanho, somado com o custo dos adicionais
-        P: preco da Base original no Cardapio
-        M: preco da Base acrescentado de 30%
-        G: preco da Base acrescentado de 50%
-        Regra 3: O custo de um Pedido é o somatório do custo de todos os Shake presentes nos ItemPedido desse Pedido
-            (dica: ItemPedido possui um atributo quantidade)
-*/
+        total = this.itens.stream()
+                .map(cadaPedido -> {
+                    final var precoTamanho = TipoTamanho.obterMultiplicador(cadaPedido.getShake().getTipoTamanho());
+                    final var precoBase = cardapio.buscarPreco(cadaPedido.getShake().getBase());
+                    final var quantidade = cadaPedido.getQuantidade();
+                    final var pFinal = precoBase + precoTamanho * precoBase;
+                    final var precoAdicionais = cadaPedido.getShake().getAdicionais().stream().reduce(
+                            0.0,
+                            (Double p, Adicional adicional) -> (p + cardapio.buscarPreco(adicional)),
+                            Double::sum);
+                    return (pFinal + precoAdicionais) * quantidade;
+
+                })
+                .reduce(0.0, Double::sum);
         return total;
     }
 
@@ -46,28 +55,30 @@ public class Pedido{
                 .filter(item -> item.equals(itemPedidoAdicionado)).findAny()
                 .ifPresentOrElse(
                         (ItemPedido itemPresente) -> {
-                            int qtdPresente = itemPresente.getQuantidade();
+                            final int qtdPresente = itemPresente.getQuantidade();
                             itemPresente.setQuantidade(qtdPresente + itemPedidoAdicionado.getQuantidade());
                         },
-                        () -> {
-                            this.itens.add(itemPedidoAdicionado);
-                        }
+                        () ->
+                                this.itens.add(itemPedidoAdicionado)
                 );
     }
-    private void define(ItemPedido itemPedidoAdicionado){
-    }
 
-    public void removeItemPedido(ItemPedido itemPedidoRemovido) {
-        ItemPedido itemPedido = this.itens.stream().filter(itemPedidoRemovido::equals)
+
+    public Pedido removeItemPedido(ItemPedido itemPedidoRemovido) {
+        final ItemPedido itemPedido = this.itens.stream()
+                .filter(itemPedidoRemovido::equals)
                 .findFirst()
                 .orElseThrow(() -> new IllegalArgumentException("Item nao existe no pedido."));
         this.removeShake(itemPedido);
+        return this;
     }
 
-    public void removeShake(ItemPedido itemPedido){
-       itemPedido.removeShake();
-       if (itemPedido.getQuantidade() == 0)
-           this.itens.remove(itemPedido);
+    private void removeShake(ItemPedido itemPedido){
+        if (Objects.nonNull(itemPedido)){
+            itemPedido.removeShake();
+            if (itemPedido.getQuantidade() <= 0)
+                this.itens.remove(itemPedido);
+        }
     }
 
     @Override

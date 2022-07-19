@@ -61,6 +61,14 @@ public class ItemPedido {
         }
     }
 
+    public void adicionaShake(){
+        this.quantidade++;
+    }
+
+    public void adicionaShake(int quantidade){
+        this.quantidade += quantidade;
+    }
+
     public double calcValor(Cardapio cardapio){
         return -1;
     }
